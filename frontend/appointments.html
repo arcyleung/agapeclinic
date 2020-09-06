@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<header>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Baloo Chettan 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</header>
+
+<div class="jumbotron text-center banner">
+    <img class="logo" src="./img/agape_logo.jpg"></img>
+    <div class="motd-bg">
+        <div class="motd-container">
+            <div class="motd-title">
+                <img src="./img/warn.png" style="max-height: 40px;" />
+                &emsp;
+                Important Notice
+                &emsp;
+                <img src="./img/warn.png" style="max-height: 40px;" />
+            </div>
+            <div class="motd">
+                Due to the COVID-19 pandemic, our clinic opens on TUESDAY & FRIDAY ONLY until further notice.
+                Urgent consultations will be scheduled accordingly. Doctors will contact patients via telephone for
+                follow-up on
+                scheduled day.
+                If you need to visit in-person, please email or call us to reschedule your appointment to the next
+                available
+                Tuesdays.
+            </div>
+        </div>
+    </div>
+</div>
+
+<body>
+    <div class="tab-content">
+        <div class="container">
+            <ul class="row no-gutters mb-2 nav nav-tabs-nostyle">
+                <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
+                    <a href="/index.html" class="nav-link" data-toggle="tab" data-target="#team"
+                        style="color: inherit;">
+                        <div class="nav-btn mr-2 ">Our Team</div>
+                    </a>
+                </li>
+                <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
+                    <a href="/contact.html" class="nav-link" data-toggle="tab" data-target="#contact"
+                        style="color: inherit;">
+                        <div class="nav-btn mr-2">Contact Us</div>
+                    </a>
+                </li>
+                <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
+                    <a href="/appointments.html" class="nav-link active" data-toggle="tab" data-target="#appointments"
+                        style="color: inherit;">
+                        <div class="nav-btn mr-2">Appointments</div>
+                    </a>
+                </li>
+                <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
+                    <a href="/referral.html" class="nav-link" data-toggle="tab" data-target="#referral"
+                        style="color: inherit;">
+                        <div class="nav-btn mr-2">Referral Form</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <br>
+
+        <div id="appointments" class="row mb-2 tab-pane fade no-gutters show active">
+            <div class="col-12 mb-2">
+                <div class="container">
+                    <h1>Appointments</h1>
+                    <br>
+                    Usually our physicians see patients on an appointment basis. However, when necessary, they will
+                    see a patient anytime, day or night. If you are experiencing problems, please call our office. We
+                    will
+                    arrange for you to see your physician as soon as possible. Our office hours are from 8AM to 6PM,
+                    Monday to
+                    Friday. To schedule an appointment during your physician's office hours, please call us at
+                    613-425-6888.
+                    <br><br>
+                    If you are unable to keep your appointment, please let us know as soon as possible. Our physicians
+                    make every effort to keep their appointments on schedule. Emergencies do arise, however, and
+                    sometimes a delay is unavoidable. When this happens, we do all we can to minimize the inconvenience.
+                    If an emergency occurs and you need to contact your doctor during office hours, call us. We have
+                    surgeons on call at all times, and one will be available to help you.
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                    <p class="copyright-text">&copy; 2020. Agape Integrated Clinic. All Rights Reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+<script>
+    function gotoHash() {
+        var navLink;
+        var pane = $('a[data-target="' + location.hash + '"]');
+        console.log(pane);
+        if (pane.length) {
+            $('.tab-pane').removeClass('active');
+            $('.nav-link').removeClass('active');
+            $('a[data-target="' + location.hash + '"]').tab('show');
+            $('a[data-target="' + location.hash + '"]').addClass('active');
+        }
+        return $('a[data-toggle="tab"]').on('shown', function (e) {
+            return location.hash = $(e.target).attr('href').substr(1);
+        });
+    }
+    $(document).ready(function () {
+        if (location.hash !== '') {
+            gotoHash();
+        }
+    });
+
+    $(window).on('hashchange', function (e) {
+        gotoHash()
+    });
+</script>
+
+<style>
+    html {
+        height: 100%;
+        overflow-y: scroll;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Roboto';
+
+        min-height: 100vh;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    footer {
+        margin-top: auto;
+        padding-top: 2rem;
+    }
+
+    h1 {
+        font-family: 'Baloo Chettan 2';
+    }
+
+    .logo {
+        max-height: 20vh;
+        object-fit: scale-down;
+    }
+
+    .banner {
+        background-color: white;
+        padding: 0.5rem 0 0.5rem 0;
+    }
+
+    .motd {
+        padding: 1rem 0.5rem 1rem 0.5rem;
+        max-width: 1240px;
+        background-color: #991B1E;
+        color: #FFFFFF;
+    }
+
+    .motd-title {
+        padding: 1rem 0.5rem 0 0.5rem;
+        background-color: #991B1E;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        object-fit: scale-down;
+        max-height: 100px;
+        color: white;
+        font-family: 'Baloo Chettan 2';
+        font-size: 20pt;
+    }
+
+    .motd-bg {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        background: repeating-linear-gradient(135deg,
+                #FFF 1%,
+                #991B1E 1%,
+                #991B1E 1.5%,
+                #FFF 1.5%,
+                #FFF 2%);
+        width: 100%;
+        /* To avoid multiple instances */
+    }
+
+    .motd-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .nav-link {
+        padding: 0;
+        all: unset
+    }
+
+    .nav-link.active>.nav-btn {
+        cursor: pointer;
+        border-color: #FF3300;
+        border-width: 0 12px 1px 0;
+        color: #FFFFFF;
+        -webkit-text-fill-color: rgba(255, 255, 255, 1);
+        opacity: 1;
+        -webkit-opacity: 1;
+        background-color: rgb(32, 32, 32);
+    }
+
+    .nav-btn {
+        font-family: 'Baloo Chettan 2';
+        user-select: none;
+        padding: 1rem 0 1rem 1rem;
+        border-color: lightgray;
+        border-style: solid;
+        border-width: 0 1px 1px 0;
+        transition: 0.2s;
+        transition-timing-function: ease-in;
+    }
+
+    .nav-btn:hover {
+        cursor: pointer;
+        border-color: #FF3300;
+        border-width: 0 4px 1px 0;
+        color: #FFFFFF;
+        background-color: rgb(32, 32, 32);
+    }
+
+    .tab-content {
+        min-height: 90vh;
+    }
+
+    .contact {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: top;
+    }
+
+    .card-title {
+        font-family: 'Baloo Chettan 2';
+    }
+
+    .map-responsive {
+        text-align: center;
+        overflow: hidden;
+        /* padding-bottom: 56.25%; */
+        min-height: 50vh;
+        position: relative;
+        height: 0;
+    }
+
+    .map-responsive iframe {
+        left: 0;
+        top: 0;
+        min-height: 100%;
+        width: 100%;
+        position: absolute;
+    }
+</style>
+
+</html>
