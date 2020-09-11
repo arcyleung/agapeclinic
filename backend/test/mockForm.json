@@ -13,6 +13,7 @@
     "patientProvince":"PProvince",
     "patientPostal":"PPostal",
     "patientHistory":"PHistory",
+    "patientUrgent":"PUrgent",
     "patientDiagnosis":"PDiagnosis",
     "doctorFirst":"DFirst",
     "doctorMiddle":"DMiddle",
