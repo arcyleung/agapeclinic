@@ -5,16 +5,51 @@ const multer = require('multer');
 const nodemailer = require('nodemailer');
 const Pdfmake = require('pdfmake');
 const moment = require('moment');
+const cron = require('node-cron');
+const { execSync } = require('child_process');
 require('dotenv').config();
 
 let mailingList;
+let motdAuthorizedEmailsList;
+
 try {
   mailingList = fs.readFileSync('mailing-list').toString().split('\n');
   if (!mailingList.length) { throw Error('mailing-list must contain at least 1 email!'); }
 } catch (ex) {
-  console.error('Failed to read mailing list: please ensure a "mailing-list" file is present in the same directory as index.js');
+  console.error('Failed to read mailing-list: please ensure a "mailing-list" file is present in the same directory as index.js');
   process.exit(1);
 }
+
+try {
+  motdAuthorizedEmailsList = fs.readFileSync('motd-authorized-emails').toString().split('\n');
+  if (!motdAuthorizedEmailsList.length) { throw Error('motd-authorized-emails must contain at least 1 email!'); }
+} catch (ex) {
+  console.error('Failed to read motd-authorized-emails: please ensure a "motd-authorized-emails" file is present in the same directory as index.js');
+  process.exit(1);
+}
+
+// Set up the cron job to read the latest MOTD from the SMTP host
+let lastTimestamp;
+const curlCommand = `curl -s --url 'imap://${process.env.MOTD_HOST}/INBOX;UID=*;SECTION=HEADER.FIELDS%20(DATE)' 'imap://${process.env.MOTD_HOST}/INBOX;UID=*;SECTION=HEADER.FIELDS%20(X-SENDER)' 'imap://${process.env.MOTD_HOST}/INBOX;UID=*;SECTION=TEXT' -u ${process.env.MOTD_USER}:${process.env.MOTD_PASS}`;
+
+cron.schedule('* * * * *', () => {
+  const output = execSync(curlCommand);
+  const [timestamp, sender, message] = output.toString().split(/[\r\n]+/);
+  if (timestamp === lastTimestamp) {
+    return;
+  }
+
+  lastTimestamp = timestamp;
+
+  const senderEmail = sender.split(' ')[1];
+  if (!motdAuthorizedEmailsList.contains(senderEmail)) {
+    return;
+  }
+
+  // Generarte the new MOTD html
+  console.log(sender);
+  console.log(message);
+});
 
 // Refactor into config; we likely won't see > 100 referrals a day
 const maxReferrals = 100;

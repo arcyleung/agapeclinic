@@ -10,9 +10,16 @@ Requires Node v12.16.2 (LTS)
 ### Configuration
 Please ensure the following environment variables are set in a .env file placed in the same directory as `index.js`
 ```
+// Referrals
 MAIL_HOST={your SMTP host}
 MAIL_USER={mailer user account}
 MAIL_PASS={mailer user password}
+
+// MOTD
+MOTD_HOST={your SMTP host}
+MOTD_USER={motd receiver user account}
+MOTD_PASS={motd receiver user password}
+FRONTEND_ASSETS_PATH
 ```
 
 Ensure the `mailing-list` file is present in the same directory as `index.js`, containing the emails that each referral form will be mailed to (demarcated by newlines)
