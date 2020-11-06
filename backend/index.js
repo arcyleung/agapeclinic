@@ -1,16 +1,26 @@
-const express = require('express');
+/* eslint-disable no-console */
 const fs = require('fs');
-const bodyParser = require('body-parser');
-const multer = require('multer');
-const nodemailer = require('nodemailer');
-const Pdfmake = require('pdfmake');
-const moment = require('moment');
-const cron = require('node-cron');
 const path = require('path');
-const { execSync } = require('child_process');
+const crypto = require('crypto');
+const moment = require('moment');
+const multer = require('multer');
+const cron = require('node-cron');
+const express = require('express');
+const NodeCache = require('node-cache');
+const nodemailer = require('nodemailer');
 const Handlebars = require('handlebars');
+const bodyParser = require('body-parser');
+const { execSync } = require('child_process');
+
+const pjson = require('./package.json');
+const generateCaptcha = require('./captcha');
+const { buildReferralForm, createPdfBinary } = require('./referral-form');
+
 require('dotenv').config();
 
+// ==============================================
+// CONFIGS
+// ==============================================
 let mailingList;
 let motdAuthorizedEmailsList;
 
@@ -38,6 +48,15 @@ let lastGenDay = moment().format('D');
 const upload = multer({ storage: multer.memoryStorage() });
 const app = express();
 
+const captchaCache = new NodeCache(
+  {
+    stdTTL: 30,
+    maxKeys: 5,
+    deleteOnExpire: true,
+    checkperiod: 30,
+  },
+);
+
 // debugging
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -51,8 +70,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// ==============================================
+// HELPER FUNCTIONS
+// ==============================================
+
 function renderTemplate(data, templateFile, outputFile) {
-  const source = fs.readFileSync(templateFile,'utf8').toString();
+  const source = fs.readFileSync(templateFile, 'utf8').toString();
   const template = Handlebars.compile(source);
   const output = template(data);
   fs.writeFileSync(path.join(process.env.FRONTEND_ASSETS_PATH, outputFile), output);
@@ -83,33 +106,6 @@ cron.schedule('* * * * *', () => {
   renderTemplate({ message }, 'templates/motd.hbs', 'motd.html');
   console.log(`Generated new MOTD at ${moment.utc()}`);
 });
-
-function createPdfBinary(pdfDoc, callback, data) {
-  const fontDescriptors = {
-    Roboto: {
-      normal: 'fonts/Roboto-Regular.ttf',
-      bold: 'fonts/Roboto-Medium.ttf',
-      italics: 'fonts/Roboto-Italic.ttf',
-      bolditalics: 'fonts/Roboto-MediumItalic.ttf',
-    },
-  };
-
-  const printer = new Pdfmake(fontDescriptors);
-
-  const doc = printer.createPdfKitDocument(pdfDoc);
-
-  const chunks = [];
-  let binary;
-
-  doc.on('data', (chunk) => {
-    chunks.push(chunk);
-  });
-  doc.on('end', () => {
-    binary = Buffer.concat(chunks);
-    callback(binary, data);
-  });
-  doc.end();
-}
 
 function generateRefID() {
   const now = moment();
@@ -179,113 +175,9 @@ function sendEmail(binary, data, files, recipients) {
   }
 }
 
-function buildReferralForm(data, files) {
-  const photos = files.map((f) => ({
-    marginTop: 5,
-    image: f.buffer,
-    width: 500,
-    alignment: 'center',
-  }));
-
-  return {
-    content: [
-      {
-        alignment: 'justify',
-        columns: [
-          { text: 'Agape Clinic Referral Form', style: 'header' },
-          {
-            image: 'img/agape_logo.jpg',
-            width: 150,
-            alignment: 'justify',
-          },
-        ],
-      },
-      { text: `Referral ID: ${data.refID}` },
-      { text: `Generated on: ${moment().format('dddd, MMMM Do YYYY, h:mm:ss a')}`, marginTop: 5 },
-      { text: 'Patient Information', style: 'subheader' },
-      {
-        style: 'tableExample',
-        fillColor: '#f9f9f9',
-        table: {
-          widths: [80, '*'],
-          body: [
-
-            ['Name', `${data.patientFirst} ${data.patientMiddle} ${data.patientLast}`],
-            ['DOB\n(mm/dd/yyyy)', `${data.patientDOB}`],
-            ['Gender', `${data.patientGender}`],
-            ['OHIP Number', `${data.patientOHIP}`],
-            ['Phone', `${data.patientPhone}`],
-            ['Email', `${data.patientEmail}`],
-            ['Address', `${data.patientAddr1}\n${data.patientAddr2}\n${data.patientCity} ${data.patientProvince} ${data.patientPostal}`],
-          ],
-        },
-        layout: 'noBorders',
-      },
-      {
-        style: 'tableExample',
-        fillColor: '#f9f9f9',
-        table: {
-          widths: [80, '*'],
-          body: [
-
-            ['History', `${data.patientHistory}`],
-          ],
-        },
-        layout: 'noBorders',
-      },
-      {
-        style: 'tableExample',
-        fillColor: '#f9f9f9',
-        table: {
-          widths: [80, '*'],
-          body: [
-
-            ['Provisional Diagnosis', `${data.patientDiagnosis}`],
-          ],
-        },
-        layout: 'noBorders',
-      },
-      { text: 'Referring Doctor\'s Information', style: 'subheader' },
-      {
-        style: 'tableExample',
-        fillColor: '#f9f9f9',
-        table: {
-          widths: [80, '*'],
-          body: [
-
-            ['Name', `${data.doctorFirst} ${data.doctorMiddle} ${data.doctorLast}`],
-            ['Phone', `${data.doctorPhone}`],
-            ['Email', `${data.doctorEmail}`],
-            ['Fax', `${data.doctorFax}`],
-            ['OHIP BN', `${data.doctorBN}`],
-            ['Practice Address', `${data.doctorClinic}\n${data.doctorAddr1}\n${data.doctorAddr2}\n${data.doctorCity} ${data.doctorProvince} ${data.doctorPostal}`],
-          ],
-        },
-        layout: 'noBorders',
-      },
-      { text: 'Attachments', style: 'subheader', pageBreak: 'before' },
-      ...photos,
-    ],
-    styles: {
-      header: {
-        fontSize: 18,
-        bold: true,
-        margin: [0, 0, 0, 10],
-      },
-      subheader: {
-        fontSize: 16,
-        bold: true,
-        margin: [0, 10, 0, 5],
-      },
-      tableExample: {
-        margin: [0, 5, 0, 15],
-      },
-    },
-    defaultStyle: {
-      // alignment: 'justify'
-    },
-  };
-}
+// ==============================================
+// EXPRESS ROUTES
+// ==============================================
 
 // for parsing application/json
 app.use(bodyParser.json());
@@ -325,10 +217,16 @@ app.get('/referral/health', (req, res) => {
 
 // TODO: job queue system
 app.post('/referral', upload.array('images'), (req, res) => {
+  const data = { ...req.body };
+
+  // Verify captcha
+  if (captchaCache.take(data.captchaHash) !== data.captchaResponse) {
+    res.status(200).redirect('../referral_received.html');
+  }
+
   try {
     // PDF generation
     const refID = generateRefID();
-    const data = { ...req.body };
     data.refID = refID;
     const { files } = req;
 
@@ -383,9 +281,29 @@ app.post('/referral/test', upload.array('images'), (req, res) => {
   }
 });
 
+app.get('/referral/captcha', (req, res) => {
+  let retries = 3;
+  do {
+    try {
+      const ret = generateCaptcha(500, 200);
+      const { image, text } = ret;
+      const hash = crypto.createHash('sha256').update(image).digest('hex');
+      captchaCache.set(hash, text);
+      res.status(200).send(image);
+    } catch (ex) {
+      console.error(ex);
+      captchaCache.flushAll();
+    }
+    retries -= 1;
+  } while (retries > 0);
+  res.status(500).send('Error generating captcha, please try again later...');
+});
+
 const server = app.listen(8081, () => {
   const host = server.address().address;
   const { port } = server.address();
 
+  console.log('AGAPE CLINIC BACKEND v%s', pjson.version);
+  console.log('Started on %s', moment.utc());
   console.log('Listening at http://%s:%s', host, port);
 });

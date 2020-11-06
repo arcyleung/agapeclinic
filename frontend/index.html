@@ -40,10 +40,10 @@
         <img src="./res/warn.png" style="max-height: 40px;" />
       </div>
       <div class="motd">
-        Our regular office hours are: Mon - Fri 8:30AM to 5PM.  
+        Our regular office hours are: Mon - Fri 8:30AM to 5PM.
         <br>
         □ ■ ■ ■ ■ ■ □<br>
-        For telephone follow-up requests, please call <a href="tel:613-425-6888"> (613) 425-6888</a> or email:  <a href="mailto: info@agapeclinic.ca">info@agapeclinic.ca</a>
+        For telephone follow-up requests, please call <a href="tel:613-425-6888"> (613) 425-6888</a> or email: <a href="mailto: info@agapeclinic.ca">info@agapeclinic.ca</a>
         <br>
         <!-- <br><br>
         Our temporary phone number during closure:<br>
@@ -266,7 +266,8 @@
           Our physicians will follow up within a few days as soon as we are notified.
           <br>
           <hr />
-          <form action="https://agapeclinic.ca/referral/" method="POST" enctype="multipart/form-data">
+          <form id="referral-form" action="https://agapeclinic.ca/referral/test" method="POST"
+            enctype="multipart/form-data">
             <h3>Patient's Information</h3>
             <br>
             <div class="form-group row">
@@ -324,15 +325,16 @@
                 <legend class="col-form-label col-sm-2 pt-0">Status:</legend>
                 <div class="col-sm-10">
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="patientStatus" id="gridRadios1" value="Urgent"
+                    <input class="form-check-input" type="radio" name="patientStatus" id="gridRadios4" value="Urgent"
                       checked>
-                    <label class="form-check-label" for="gridRadios1">
+                    <label class="form-check-label" for="gridRadios4">
                       Urgent
                     </label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="patientStatus" id="gridRadios2" value="Non-Urgent">
-                    <label class="form-check-label" for="gridRadios2">
+                    <input class="form-check-input" type="radio" name="patientStatus" id="gridRadios5"
+                      value="Non-Urgent">
+                    <label class="form-check-label" for="gridRadios5">
                       Non-Urgent
                     </label>
                   </div>
@@ -402,8 +404,8 @@
                   <strong>OR</strong>
                   <span class="dragBox">
                     Drag & Drop images here
-                    <input name="images" type="file" accept=".jpg,.jpeg,.png" onChange="dragNdrop(event)" ondragover="drag()" ondrop="drop()"
-                      id="uploadFile" multiple />
+                    <input name="images" type="file" accept=".jpg,.jpeg,.png" onChange="dragNdrop(event)"
+                      ondragover="drag()" ondrop="drop()" id="uploadFile" multiple />
                   </span>
                   <div id="preview"></div>
                 </div>
@@ -444,7 +446,8 @@
                 <div class="invalid-feedback">
                   Please enter an email
                 </div>
-                <input type="text" pattern="[0-9]{6}" class="form-control" name="doctorBN" placeholder="OHIP Billing Number (6 digits)" required>
+                <input type="text" pattern="[0-9]{6}" class="form-control" name="doctorBN"
+                  placeholder="OHIP Billing Number (6 digits)" required>
                 <div class="invalid-feedback">
                   Please enter your OHIP Billing Number (6 digits)
                 </div>
@@ -509,6 +512,7 @@
 </body>
 
 <script>
+
   function gotoHash() {
     var navLink;
     var pane = $('a[data-target="' + location.hash + '"]');
