@@ -26,6 +26,7 @@
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
     crossorigin="anonymous"></script>
   <script type="text/javascript" src="./dist/image-uploader.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
 </header>
 
 <div class="jumbotron text-center banner">
@@ -43,7 +44,8 @@
         Our regular office hours are: Mon - Fri 8:30AM to 5PM.
         <br>
         □ ■ ■ ■ ■ ■ □<br>
-        For telephone follow-up requests, please call <a href="tel:613-425-6888"> (613) 425-6888</a> or email: <a href="mailto: info@agapeclinic.ca">info@agapeclinic.ca</a>
+        For telephone follow-up requests, please call <a href="tel:613-425-6888"> (613) 425-6888</a> or email: <a
+          href="mailto: info@agapeclinic.ca">info@agapeclinic.ca</a>
         <br>
         <!-- <br><br>
         Our temporary phone number during closure:<br>
@@ -77,7 +79,8 @@
           </a>
         </li>
         <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
-          <a href="/referral.html" class="nav-link" data-toggle="tab" data-target="#referral" style="color: inherit;">
+          <a href="agape/referral.html" class="nav-link" data-toggle="tab" data-target="#referral"
+            style="color: inherit;">
             <div class="nav-btn mr-2">Referral Form</div>
           </a>
         </li>
@@ -266,7 +269,7 @@
           Our physicians will follow up within a few days as soon as we are notified.
           <br>
           <hr />
-          <form id="referral-form" action="https://agapeclinic.ca/referral/test" method="POST"
+          <form id="referral-form" action="https://agapeclinic.ca/referral" method="POST"
             enctype="multipart/form-data">
             <h3>Patient's Information</h3>
             <br>
@@ -350,7 +353,7 @@
             <div class="form-group row">
               <label for="colFormLabel" class="col-sm-2 col-form-label">Contact</label>
               <div class="col-sm-5 mb-2 mb-sm-0">
-                <input type="tel" class="form-control" name="patientPhone" placeholder="Phone" required>
+                <input type="tel" class="form-control" name="patientPhone" placeholder="Phone" data-mask="(999) 999-9999" required>
                 <div class="invalid-feedback">
                   Please enter a phone number
                 </div>
@@ -400,7 +403,7 @@
                 only</label>
               <div class="col-sm-10">
                 <div class="uploadOuter">
-                  <label for="uploadFile" class="btn btn-primary">Upload Images</label>
+                  <label for="uploadFile" class="btn btn-secondary">Upload Images</label>
                   <strong>OR</strong>
                   <span class="dragBox">
                     Drag & Drop images here
@@ -493,7 +496,26 @@
                 not support HTTPS, please use an up to date one to submit this form. Private information received will
                 not be stored for any other purpose and is immediately forwarded to our physicians' mailbox.</i></p>
             <hr />
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="form-group row">
+              <div class="col-sm-12 text-center" >
+              <img id="captchaImg" src="" alt="Please press 'Request Code' then enter the letters and numbers that you see (Case Sensitive)" />
+            </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2" >
+                <button id="captchaBtn" type="button" onclick="getCaptcha()" class="btn btn-secondary">Request Code</button>
+              </div>
+              <div class="col-sm-10" >
+                <input type="hidden" id="captchaHash" name="captchaHash" value="" />
+                <input type="text" pattern="[A-Z a-z 0-9]{6}" class="form-control" name="captchaResponse"
+                  placeholder="Verification code" required />
+                <div class="invalid-feedback">
+                  Please enter the verification code
+                </div>
+              </div>
+            </div>
+              
+              <button id="submitBtn" type="submit" class="btn btn-primary" disabled>Submit</button>
           </form>
         </div>
       </div>
@@ -512,7 +534,6 @@
 </body>
 
 <script>
-
   function gotoHash() {
     var navLink;
     var pane = $('a[data-target="' + location.hash + '"]');
@@ -527,6 +548,7 @@
       return location.hash = $(e.target).attr('href').substr(1);
     });
   }
+
   $(document).ready(function () {
     if (location.hash !== '') {
       gotoHash();
@@ -566,6 +588,58 @@
     document.getElementById('uploadFile').parentNode.className = 'dragBox';
   }
 
+</script>
+
+<script>
+
+  function sha256(str) {
+    // We transform the string into an arraybuffer.
+    var buffer = new TextEncoder("utf-8").encode(str);
+    return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
+      return hex(hash);
+    });
+  }
+
+  function hex(buffer) {
+    var hexCodes = [];
+    var view = new DataView(buffer);
+    for (var i = 0; i < view.byteLength; i += 4) {
+      // Using getUint32 reduces the number of iterations needed (we process 4 bytes each time)
+      var value = view.getUint32(i)
+      // toString(16) will give the hex representation of the number without padding
+      var stringValue = value.toString(16)
+      // We use concatenation and slice for padding
+      var padding = '00000000'
+      var paddedValue = (padding + stringValue).slice(-padding.length)
+      hexCodes.push(paddedValue);
+    }
+
+    // Join all the hex strings into one
+    return hexCodes.join("");
+  }
+
+  function getCaptcha() {
+    var captchaImg = document.getElementById("captchaImg");
+    var captchaHashInput = document.getElementById("captchaHash");
+    var submitBtn = document.getElementById("submitBtn");
+    console.log("Clicked!");
+    // jQuery non-min breaks the nav tabs, TODO: use a PWA framework  
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:8081/referral/captcha');
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const digest = sha256(xhr.response).then(hash => {
+          captchaImg.setAttribute("src", xhr.response);
+          captchaHashInput.setAttribute("value", hash);
+          submitBtn.removeAttribute("disabled");
+        });
+      }
+      else {
+        alert('Request failed.  Returned status of ' + xhr.status);
+      }
+    };
+    xhr.send();
+  }
 </script>
 
 <style>
