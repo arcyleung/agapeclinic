@@ -174,8 +174,9 @@ app.post('/referral', upload.array('images'), (req, res) => {
   const data = { ...req.body };
 
   // Verify captcha
-  if (captchaCache.take(data.captchaHash) !== data.captchaResponse) {
-    res.status(200).redirect('../referral_received.html');
+  const { hash, captcha } = captchaCache.take(req.ip);
+  if (data.captchaHash !== hash || data.captchaResponse !== captcha) {
+    return res.status(200).redirect('../captcha_failed.html');
   }
 
   try {
