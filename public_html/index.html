@@ -58,7 +58,7 @@
   </div>
 </div>
 
-<body>
+<body id="body">
   <div class="tab-content">
     <div class="container">
       <ul class="row no-gutters mb-2 nav nav-tabs-nostyle">
@@ -269,7 +269,7 @@
           Our physicians will follow up within a few days as soon as we are notified.
           <br>
           <hr />
-          <form id="referral-form" action="https://localhost:8081/referral" method="POST"
+          <form id="referral-form" action="https://agapeclinic.ca/referral" method="POST"
             enctype="multipart/form-data">
             <h3>Patient's Information</h3>
             <br>
@@ -438,7 +438,7 @@
             <div class="form-group row">
               <label for="colFormLabel" class="col-sm-2 col-form-label">Contact</label>
               <div class="col-sm-5 mb-2 mb-sm-0">
-                <input type="tel" class="form-control mb-2" name="doctorPhone" placeholder="Phone" required>
+                <input type="tel" class="form-control mb-2" name="doctorPhone" placeholder="Phone" data-mask="(999) 999-9999" required>
                 <div class="invalid-feedback">
                   Please enter a phone number
                 </div>
@@ -625,7 +625,7 @@
     console.log("Clicked!");
     // jQuery non-min breaks the nav tabs, TODO: use a PWA framework  
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8081/referral/captcha');
+    xhr.open('GET', 'https://agapeclinic.ca/referral/captcha');
     xhr.onload = function () {
       if (xhr.status === 200) {
         const digest = sha256(xhr.response).then(hash => {
@@ -633,10 +633,10 @@
           captchaHashInput.setAttribute("value", hash);
           submitBtn.removeAttribute("disabled");
         });
-      }
-      else {
+      } else {
         alert('Request failed.  Returned status of ' + xhr.status);
       }
+      submitBtn.scrollIntoView(true);
     };
     xhr.send();
   }
