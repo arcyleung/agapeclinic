@@ -13,7 +13,7 @@ const pjson = require('./package.json');
 const generateCaptcha = require('./captcha');
 const { buildReferralForm, createPdfBinary } = require('./referral-form');
 
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config();
 
 // ==============================================
 // CONFIGS
@@ -38,10 +38,10 @@ const app = express();
 
 const captchaCache = new NodeCache(
   {
-    stdTTL: 30,
+    stdTTL: 300,
     maxKeys: 5,
     deleteOnExpire: true,
-    checkperiod: 30,
+    checkperiod: 60,
   },
 );
 
@@ -174,9 +174,9 @@ app.get('/referral/health', (req, res) => {
 app.post('/referral', upload.array('images'), (req, res) => {
   const data = { ...req.body };
 
+  const expected = captchaCache.take(data.captchaHash);
   // Verify captcha
-  const { hash, captcha } = captchaCache.take(req.ip);
-  if (data.captchaHash !== hash || data.captchaResponse !== captcha) {
+  if (data.captchaResponse !== expected) {
     return res.status(200).redirect('../captcha_failed.html');
   }
 
@@ -204,10 +204,24 @@ app.post('/referral', upload.array('images'), (req, res) => {
 });
 
 app.post('/referral/test', upload.array('images'), (req, res) => {
+  const data = { ...req.body };
+
+  const expected = captchaCache.take(data.captchaHash);
+  // Verify captcha
+  if (data.captchaResponse !== expected) {
+    console.log(expected);
+    console.log(data.captchaResponse)
+    return res.send({
+      ip: req.ip,
+      captchaHash: data.captchaHash,
+      captchaResponse: data.captchaResponse,
+      correctResponse: expected
+    });
+  }
+
   try {
     // PDF generation
     const refID = 99;
-    const data = { ...req.body };
     data.refID = refID;
     const { files } = req;
 
@@ -226,14 +240,15 @@ app.post('/referral/test', upload.array('images'), (req, res) => {
       (binary) => {
         sendEmail(binary, data, files, [data.testEmail]);
       }, (error) => {
-        console.log(error);
+        res.status(500).redirect('../referral_failed.html');
+        res.send(error);
       });
 
     // TODO: use async/ await to send confirmation
     res.status(200).redirect(`../referral_received.html?refID=${refID}`);
   } catch (ex) {
     console.error(ex);
-    res.status(500).redirect('../referral_failed.html');
+    res.send(ex);
   }
 });
 
@@ -244,8 +259,9 @@ app.get('/referral/captcha', (req, res) => {
       const captchaData = generateCaptcha(500, 200);
       const { image, text } = captchaData;
       const hash = crypto.createHash('sha256').update(image).digest('hex');
-      captchaCache.set(req.ip, { hash, text });
-      console.log(req.ip);
+      captchaCache.set(hash, text);
+      console.log(hash, text);
+      console.log(captchaCache.get(hash))
       return res.status(200).send(image);
     } catch (ex) {
       console.error(ex);
