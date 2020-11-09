@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const fs = require('fs');
+const path = require('path');
 const crypto = require('crypto');
 const moment = require('moment');
 const multer = require('multer');
@@ -12,7 +13,7 @@ const pjson = require('./package.json');
 const generateCaptcha = require('./captcha');
 const { buildReferralForm, createPdfBinary } = require('./referral-form');
 
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 // ==============================================
 // CONFIGS

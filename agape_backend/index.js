@@ -22,32 +22,36 @@ pm2.connect(true, (err) => {
   pm2.start({
     name: 'agape-backend',
     script: 'app.js', // Script to be run
-    exec_mode: 'cluster', // Allows your app to be clustered
-    instances: 2, // Optional: Scales your app by 2
+    exec_mode: 'fork', // Allows your app to be clustered
+    instances: 1, // Optional: Scales your app by 2
     watch: 'app.js',
     mergeLogs: true,
     max_memory_restart: '400M', // Optional: Restarts your app if it reaches 100Mo
     output: './logs/agape-backend.log',
     error: './logs/agape-backend.err',
     logDateFormat: 'YYYY-MM-DD HH:mm Z',
+    env: {
+      NODE_ENV: "production",
+      PORT: 8081
+    }
   }, (err, apps) => {
     pm2.disconnect(); // Disconnects from PM2
     if (err) throw err;
   });
 
-  pm2.start({
-    name: 'agape-motd',
-    script: 'motd.js', // Script to be run
-    exec_mode: 'cluster', // Allows your app to be clustered
-    instances: 1, // Optional: Scales your app by 2
-    watch: 'motd.js',
-    mergeLogs: true,
-    max_memory_restart: '400M', // Optional: Restarts your app if it reaches 100Mo
-    output: './logs/agape-motd.log',
-    // error: './logs/agape-motd.err',
-    logDateFormat: 'YYYY-MM-DD HH:mm Z',
-  }, (err, apps) => {
-    pm2.disconnect(); // Disconnects from PM2
-    if (err) throw err;
-  });
+  // pm2.start({
+  //   name: 'agape-motd',
+  //   script: 'motd.js', // Script to be run
+  //   exec_mode: 'cluster', // Allows your app to be clustered
+  //   instances: 1, // Optional: Scales your app by 2
+  //   watch: 'motd.js',
+  //   mergeLogs: true,
+  //   max_memory_restart: '400M', // Optional: Restarts your app if it reaches 100Mo
+  //   output: './logs/agape-motd.log',
+  //   // error: './logs/agape-motd.err',
+  //   logDateFormat: 'YYYY-MM-DD HH:mm Z',
+  // }, (err, apps) => {
+  //   pm2.disconnect(); // Disconnects from PM2
+  //   if (err) throw err;
+  // });
 });
