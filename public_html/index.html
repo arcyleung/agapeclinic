@@ -353,7 +353,8 @@
             <div class="form-group row">
               <label for="colFormLabel" class="col-sm-2 col-form-label">Contact</label>
               <div class="col-sm-5 mb-2 mb-sm-0">
-                <input type="tel" class="form-control" name="patientPhone" placeholder="Phone" data-mask="(999) 999-9999" required>
+                <input type="tel" class="form-control" name="patientPhone" placeholder="Phone"
+                  data-mask="(999) 999-9999" required>
                 <div class="invalid-feedback">
                   Please enter a phone number
                 </div>
@@ -414,7 +415,7 @@
                 </div>
               </div>
             </div>
-            <br>
+            <hr />
             <h3>Referring Doctor's Information</h3>
             <br>
             <div class="form-group row">
@@ -438,7 +439,8 @@
             <div class="form-group row">
               <label for="colFormLabel" class="col-sm-2 col-form-label">Contact</label>
               <div class="col-sm-5 mb-2 mb-sm-0">
-                <input type="tel" class="form-control mb-2" name="doctorPhone" placeholder="Phone" data-mask="(999) 999-9999" required>
+                <input type="tel" class="form-control mb-2" name="doctorPhone" placeholder="Phone"
+                  data-mask="(999) 999-9999" required>
                 <div class="invalid-feedback">
                   Please enter a phone number
                 </div>
@@ -496,26 +498,31 @@
                 not support HTTPS, please use an up to date one to submit this form. Private information received will
                 not be stored for any other purpose and is immediately forwarded to our physicians' mailbox.</i></p>
             <hr />
+            <h3>Verification</h3>
             <div class="form-group row">
-              <div class="col-sm-12 text-center" >
-              <img id="captchaImg" src="" alt="Please press 'Request Code' then enter the letters and numbers that you see (Case Sensitive)" />
-            </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-sm-2" >
-                <button id="captchaBtn" type="button" onclick="getCaptcha()" class="btn btn-secondary">Request Code</button>
+              <div class="col-sm-12 text-center">
+                <img id="captchaImg" src="./res/captcha_placeholder.png"
+                  alt="Please press 'Request Code' then enter the letters and numbers that you see (Case Sensitive)" />
               </div>
-              <div class="col-sm-10" >
+            </div>
+            <div class="form-group row">
+              <div class="col-4">
+                <button id="captchaBtn" type="button" onclick="getCaptcha()" class="btn btn-secondary btn-block">1. Request Code</button>
+              </div>
+              <div class="col-8">
                 <input type="hidden" id="captchaHash" name="captchaHash" value="" />
                 <input type="text" pattern="[A-Z a-z 0-9]{6}" class="form-control" name="captchaResponse"
-                  placeholder="Verification code" required />
+                  placeholder="2. Enter Code" required />
                 <div class="invalid-feedback">
                   Please enter the verification code
                 </div>
               </div>
             </div>
-              
-              <button id="submitBtn" type="submit" class="btn btn-primary" disabled>Submit</button>
+            <div class="form-group row">
+              <div class="col-12">
+                <button id="submitBtn" data-toggle="tooltip" title="We are asking you to complete a captcha code before submitting due to spam submissions, thank you for your understanding." type="submit" class="btn btn-primary btn-lg btn-block" disabled>3. Submit</button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -550,6 +557,7 @@
   }
 
   $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
     if (location.hash !== '') {
       gotoHash();
     }
@@ -622,7 +630,6 @@
     var captchaImg = document.getElementById("captchaImg");
     var captchaHashInput = document.getElementById("captchaHash");
     var submitBtn = document.getElementById("submitBtn");
-    console.log("Clicked!");
     // jQuery non-min breaks the nav tabs, TODO: use a PWA framework  
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://agapeclinic.ca/referral/captcha');
@@ -632,9 +639,12 @@
           captchaImg.setAttribute("src", xhr.response);
           captchaHashInput.setAttribute("value", hash);
           submitBtn.removeAttribute("disabled");
+          submitBtn.setAttribute("data-toggle", "");
+          submitBtn.removeAttribute("data-original-title");
+          submitBtn.removeAttribute("aria-describedby");
         });
       } else {
-        alert('Request failed.  Returned status of ' + xhr.status);
+        alert('Failed to get captcha. Please email us at info@agapeclinic.ca');
       }
       submitBtn.scrollIntoView(true);
     };
@@ -643,6 +653,11 @@
 </script>
 
 <style>
+  #captchaImg {
+    width: 300px;
+    height: auto;
+  }
+
   html {
     height: 100%;
     overflow-y: scroll;

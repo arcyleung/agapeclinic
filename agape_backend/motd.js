@@ -3,12 +3,14 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
 const cron = require('node-cron');
+const imaps = require('imap-simple');
 const Handlebars = require('handlebars');
-const { execSync } = require('child_process');
 
 require('dotenv').config();
 
 let motdAuthorizedEmailsList;
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 try {
   motdAuthorizedEmailsList = fs.readFileSync('motd-authorized-emails').toString().split('\n');
@@ -18,6 +20,18 @@ try {
   process.exit(1);
 }
 
+const config = {
+  imap: {
+    user: process.env.MOTD_USER,
+    password: process.env.MOTD_PASS,
+    host: process.env.MOTD_HOST,
+    port: 993,
+    tls: true,
+    rejectUnauthorized: false,
+    authTimeout: 10000,
+  },
+};
+
 function renderTemplate(data, templateFile, outputFile) {
   const source = fs.readFileSync(templateFile, 'utf8').toString();
   const template = Handlebars.compile(source);
@@ -25,28 +39,57 @@ function renderTemplate(data, templateFile, outputFile) {
   fs.writeFileSync(path.join(process.env.FRONTEND_ASSETS_PATH, outputFile), output);
 }
 
-// Set up the cron job to read the latest MOTD from the SMTP host
 let lastTimestamp;
-const curlCommand = `curl -s --url 'imap://${process.env.MOTD_HOST}/INBOX;UID=*;SECTION=HEADER.FIELDS%20(DATE)' 'imap://${process.env.MOTD_HOST}/INBOX;UID=*;SECTION=HEADER.FIELDS%20(X-SENDER)' 'imap://${process.env.MOTD_HOST}/INBOX;UID=*;SECTION=TEXT' -u ${process.env.MOTD_USER}:${process.env.MOTD_PASS}`;
+async function getLastMOTD() {
+  try {
+    const conn = await imaps.connect(config);
+    await conn.openBox('INBOX');
+    const searchCriteria = ['*:*'];
+    const fetchOptions = {
+      bodies: ['HEADER', 'TEXT'],
+    };
 
-cron.schedule('* * * * *', () => {
-  const output = execSync(curlCommand);
-  const [timestamp, sender, message] = output.toString().split(/[\r\n]+/);
+    const result = await conn.search(searchCriteria, fetchOptions);
+
+    let sender;
+    let timestamp;
+    let motd;
+    result[0].parts.forEach((entry) => {
+      switch (entry.which) {
+        case 'TEXT':
+          motd = entry.body;
+          break;
+        case 'HEADER':
+          sender = entry.body.from[0];
+          timestamp = entry.body.date[0];
+          break;
+        default:
+      }
+    });
+
+    return { sender, timestamp, motd };
+  } catch (ex) {
+    console.error(ex);
+  }
+}
+
+// Set up the cron job to read the latest MOTD from the SMTP host
+cron.schedule('* * * * *', async () => {
+  const { sender, timestamp, motd } = await getLastMOTD();
   if (timestamp === lastTimestamp) {
     return;
   }
 
   lastTimestamp = timestamp;
 
-  const senderEmail = sender.split(' ')[1];
-  if (!motdAuthorizedEmailsList.includes(senderEmail)) {
+  if (!motdAuthorizedEmailsList.includes(sender)) {
     return;
   }
 
   // Generarte the new MOTD html
   console.log(sender);
-  console.log(message);
+  console.log(motd);
 
-  renderTemplate({ message }, 'templates/motd.hbs', 'motd.html');
+  renderTemplate({ message: motd }, 'templates/motd.hbs', 'motd.html');
   console.log(`Generated new MOTD at ${moment.utc()}`);
 });

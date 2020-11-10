@@ -15,6 +15,8 @@ const { buildReferralForm, createPdfBinary } = require('./referral-form');
 
 require('dotenv').config();
 
+require('./motd');
+
 // ==============================================
 // CONFIGS
 // ==============================================
