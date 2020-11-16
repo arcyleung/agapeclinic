@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<header>
+  <title>Agape Integrated Clinic</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="General dermatology, Travel medicine and Integrated health care">
+  <meta name="keywords"
+    content="chiropractor,osteopath,dentist,optician,physiotherapist,therapy,physical,cosmetic,surgeon,alternative,medicine,naturopath,acupuncture,therapeutic,health,healthcare,hospital,medic,clinic,doctor">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Baloo Chettan 2' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+  <!-- JS, Popper.js, and jQuery -->
+  <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link type="text/css" rel="stylesheet" href="./dist/image-uploader.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="./dist/image-uploader.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
+</header>
+
+<div class="container"><img class="logo" src="./res/agape_logo.jpg"></img></div>
+
+<body id="body">
+  <div class="tab-content">
+    <div class="container">
+      <ul class="row no-gutters mb-2 nav nav-tabs-nostyle">
+        <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
+          <a href="/index.html" class="nav-link active" data-toggle="tab" data-target="#team" style="color: inherit;">
+            <div class="nav-btn mr-2 ">Home</div>
+          </a>
+        </li>
+        <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
+          <a href="/contact.html" class="nav-link" data-toggle="tab" data-target="#contact" style="color: inherit;">
+            <div class="nav-btn mr-2">Contact Us</div>
+          </a>
+        </li>
+        <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
+          <a href="/appointments.html" class="nav-link" data-toggle="tab" data-target="#appointments"
+            style="color: inherit;">
+            <div class="nav-btn mr-2">Appointments</div>
+          </a>
+        </li>
+        <li class="col-6 col-sm-6 col-md-3 col-lg-3 mb-2 nav-item">
+          <a href="/referral.html" class="nav-link" data-toggle="tab" data-target="#referral" style="color: inherit;">
+            <div class="nav-btn mr-2">Referral Form</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div id="team" class="row mb-2 tab-pane fade show active no-gutters">
+
+      <div class="jumbotron banner">
+
+        <div class="motd-bg">
+          <div class="motd-container container">
+            <div class="motd-title">
+              <img src="./res/warn.png" style="max-height: 30px;" />
+              &emsp;
+              Notice Board
+              &emsp;
+              <img src="./res/warn.png" style="max-height: 30px;" />
+            </div>
+            <div class="motd">
+              <br>
+              <p style="text-align: right; font-style: italic">Updated: {{ timestamp }}</p>
+               <p>{{ breaklines message }}</p>
+              <br>
+              <br>
+              Stay safe and healthy! - 
+              <em style="font-style: italic">Agape Integrated Clinic Staff</em>
+              <br>
+              <hr />
+              <div class="text-center">
+                <nobr>&nbsp;&nbsp;&nbsp;&nbsp;Mon - Fri&nbsp;&nbsp;&nbsp;&nbsp;</nobr>
+                <nobr>&nbsp;&nbsp;&nbsp;&nbsp;8:30AM to 5PM&nbsp;&nbsp;&nbsp;&nbsp;</nobr>
+                <nobr>&nbsp;&nbsp;&nbsp;&nbsp;<a href="tel:613-425-6888">(613) 425-6888</a>&nbsp;&nbsp;&nbsp;&nbsp;</nobr>
+                <nobr>&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto: info@agapeclinic.ca">info@agapeclinic.ca</a>&nbsp;&nbsp;&nbsp;&nbsp;</nobr>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 mb-2">
+        <div class="container">
+          <h1>Our Team</h1>
+          <br>
+          <div class="row no-gutters">
+            Agape Integrated Clinic provides medical services in family practice with a focus on General
+            Dermatology, Travel Medicine, and Traditional Chinese Medicine. We strive to deliver the best in
+            healthcare to our patients.
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="card mx-xs-2 mx-lg-4">
+                <img class="card-img-top" src="res/lawrence_leung.jpg" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">Dr. Lawrence Leung</h5>
+                  <p class="card-text">
+                    MBBChir (Cambridge) MRCGP(UK) FRACGP FRCGP(UK) CCFP
+                    DipPractDerm (Cardiff)<br>
+                    Focused Practice Dermatology
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card mx-xs-2 mx-lg-4">
+                <img class="card-img-top" src="res/horace_yu.jpg" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">Dr. Horace Yu</h5>
+                  <p class="card-text">
+                    MEng MD CCFP(EM)<br>
+                    Certificate of Travel Health™<br>
+                    Professional Diploma of General Dermatology (HealthCert)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <h1>Gallery</h1>
+          <br>
+          <div class="card-columns">
+            <div class="card">
+              <img class="card-img" src='res/gallery/1.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/2.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/3.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/4.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/5.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/6.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/7.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/8.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/9.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/10.jpg'>
+            </div>
+            <div class="card">
+              <img class="card-img" src='res/gallery/11.jpg'>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="contact" class="row mb-2 tab-pane fade no-gutters">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-sm-12 col-md-6 col-lg-4 contact mb-2">
+            <h1>Contact Us</h1>
+            <br>
+            <div class="row mt-4 no-gutters">
+              <div class="col-3">
+                Hours: <br>
+                <br>
+                Phone: <br>
+                <br>
+                Fax: <br>
+                <br>
+                Email: <br>
+                <br>
+              </div>
+              <div class="col-9">
+                8:30AM to 5PM<br>
+                <br>
+                <!-- <a href="tel:613-908-5288">(613) 908-5288</a>&nbsp;&nbsp;(Mo, We, Th)<br> -->
+                <a href="tel:613-425-6888">(613) 425-6888</a><br>
+                <br>
+                <a href="tel:613-425-5888">(613) 425-5888</a><br>
+                <br>
+                <a href="mailto: info@agapeclinic.ca">info@agapeclinic.ca</a><br>
+                <br>
+              </div>
+            </div>
+            <br>
+            <div class="row mt-2 mb-4 no-gutters">
+              <div class="col-3">
+                Address:
+              </div>
+              <div class="col-9">
+                Unit 4, 4188 Spratt Road<br>
+                Ottawa ON<br>
+                Canada K1V 0Z6<br>
+              </div>
+            </div>
+          </div>
+          <div class="d-none d-sm-block col-sm-12 col-md-6 col-lg-8 map-responsive" style="background-color: white;">
+            <iframe class="" frameborder="0" style="border:0"
+              src="https://www.google.com/maps/embed/v1/place?q=Agape%20Integrated%20Clinic%2C%20Spratt%20Road%2C%20Ottawa%2C%20Gloucester%2C%20ON%2C%20Canada&key=AIzaSyAYSR8ckdWPVe_lUKIMJeMGitIG17QErMA"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+
+      </div>
+      <div class="d-sm-none map-responsive" style="background-color: white;">
+        <iframe class="" frameborder="0" style="border:0"
+          src="https://www.google.com/maps/embed/v1/place?q=Agape%20Integrated%20Clinic%2C%20Spratt%20Road%2C%20Ottawa%2C%20Gloucester%2C%20ON%2C%20Canada&key=AIzaSyAYSR8ckdWPVe_lUKIMJeMGitIG17QErMA"
+          allowfullscreen></iframe>
+      </div>
+
+    </div>
+
+    <div id="appointments" class="row mb-2 tab-pane fade no-gutters">
+      <div class="col-12 mb-2">
+        <div class="container">
+          <h1>Appointments</h1>
+          <br>
+          Usually our physicians see patients on an appointment basis. If you are experiencing problems, please call
+          our
+          office. We
+          will
+          arrange for you to see your physician as soon as possible.
+          <br><br>
+          <!-- Due to COVID-19 our office hours have changed to open on TUESDAY & FRIDAY only, until further
+          notice.<br><br> -->
+          To schedule an appointment, please call us at&nbsp;
+          <!-- <a href="tel:613-908-5288">(613) 908-5288</a> (Mon, Wed, Thu)<br> -->
+          <a href="tel:613-425-6888">(613) 425-6888</a>
+          <br><br>
+          If you are unable to keep your appointment, please let us know as soon as possible. Our physicians
+          make every effort to keep their appointments on schedule. Emergencies do arise, however, and
+          sometimes a delay is unavoidable. When this happens, we do all we can to minimize the inconvenience.
+          If an emergency occurs and you need to contact your doctor during office hours, call us.
+        </div>
+      </div>
+    </div>
+
+    <div id="referral" class="row mb-2 tab-pane fade no-gutters">
+      <div class="col-12 mb-2">
+        <div class="container">
+          <h1>Referral Form</h1>
+          <br>
+          If you're a physician and would like to refer a patient to us, please complete and submit the form
+          below.
+          <br>
+          <br>
+          Alternatively, you may use the printable <a href="res/referral.pdf">PDF form</a> and fill it out by
+          hand, then <a href="/contact.html" onclick="event.preventDefault();location.hash='#contact';gotoHash()">email/
+            fax</a> it to us.
+          <br>
+          <br>
+          Our physicians will follow up within a few days as soon as we are notified.
+          <br>
+          <hr />
+          <form id="referral-form" action="https://agapeclinic.ca/referral/" method="POST"
+            enctype="multipart/form-data">
+            <h3>Patient's Information</h3>
+            <br>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Name</label>
+              <div class="col-sm-4 mb-2 mb-sm-0">
+                <input type="text" class="form-control" name="patientFirst" placeholder="First" required>
+                <div class="invalid-feedback">
+                  Please enter a first name
+                </div>
+              </div>
+              <div class="col-sm-3 mb-2 mb-sm-0">
+                <input type="text" class="form-control" name="patientMiddle" placeholder="Middle">
+              </div>
+              <div class="col-sm-3 mb-2 mb-sm-0">
+                <input type="text" class="form-control" name="patientLast" placeholder="Last" required>
+                <div class="invalid-feedback">
+                  Please enter a last name
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Date of Birth</label>
+              <div class="col-sm-6 col-md-4">
+                <input type="date" class="form-control" name="patientDOB" required>
+              </div>
+            </div>
+            <fieldset class="form-group">
+              <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                <div class="col-sm-10">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="patientGender" id="gridRadios1" value="male"
+                      checked>
+                    <label class="form-check-label" for="gridRadios1">
+                      Male
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="patientGender" id="gridRadios2" value="female">
+                    <label class="form-check-label" for="gridRadios2">
+                      Female
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="patientGender" id="gridRadios3" value="other">
+                    <label class="form-check-label" for="gridRadios3">
+                      Other
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="form-group">
+              <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Status:</legend>
+                <div class="col-sm-10">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="patientStatus" id="gridRadios4" value="Urgent"
+                      checked>
+                    <label class="form-check-label" for="gridRadios4">
+                      Urgent
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="patientStatus" id="gridRadios5"
+                      value="Non-Urgent">
+                    <label class="form-check-label" for="gridRadios5">
+                      Non-Urgent
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">OHIP/ Health Card Number</label>
+              <div class="col-sm-6 col-md-4">
+                <input type="text" class="form-control" name="patientOHIP" placeholder="0123-456-789-XY">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Contact</label>
+              <div class="col-sm-5 mb-2 mb-sm-0">
+                <input type="tel" class="form-control" name="patientPhone" placeholder="Phone"
+                  data-mask="(999) 999-9999" required>
+                <div class="invalid-feedback">
+                  Please enter a phone number
+                </div>
+              </div>
+              <div class="col-sm-5 mb-2 mb-sm-0">
+                <input type="email" class="form-control" name="patientEmail" placeholder="Email">
+                <div class="invalid-feedback">
+                  Please enter an email
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Address (Optional)</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control mb-2" name="patientAddr1" placeholder="Address Line 1">
+                <input type="text" class="form-control mb-2" name="patientAddr2" placeholder="Address Line 2">
+                <div class="row">
+                  <div class="col-4 mb-2 mb-sm-0">
+                    <input type="text" class="form-control" name="patientCity" placeholder="City">
+                  </div>
+                  <div class="col-4 mb-2 mb-sm-0">
+                    <input type="text" class="form-control" name="patientProvince" placeholder="Province">
+                  </div>
+                  <div class="col-4 mb-2 mb-sm-0">
+                    <input type="text" class="form-control" name="patientPostal" placeholder="Postal Code">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">History</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" name="patientHistory" aria-label="With textarea"
+                  placeholder="Patient's past symptoms, medications, accommodations, any noteworthy items to aid diagnosis"></textarea>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Provisional Diagnosis</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" name="patientDiagnosis" aria-label="With textarea"
+                  placeholder="Additional information regarding patient's condition"></textarea>
+
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Attachments<br>(max 10 files)<br>.jpg .png
+                only</label>
+              <div class="col-sm-10">
+                <div class="uploadOuter">
+                  <label for="uploadFile" class="btn btn-secondary">Upload Images</label>
+                  <strong>OR</strong>
+                  <span class="dragBox">
+                    Drag & Drop images here
+                    <input name="images" type="file" accept=".jpg,.jpeg,.png" onChange="dragNdrop(event)"
+                      ondragover="drag()" ondrop="drop()" id="uploadFile" multiple />
+                  </span>
+                  <div id="preview"></div>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <h3>Referring Doctor's Information</h3>
+            <br>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Name</label>
+              <div class="col-sm-4 mb-2 mb-sm-0">
+                <input type="text" class="form-control" name="doctorFirst" placeholder="First" required>
+                <div class="invalid-feedback">
+                  Please enter your first name
+                </div>
+              </div>
+              <div class="col-sm-3 mb-2 mb-sm-0">
+                <input type="text" class="form-control" name="doctorMiddle" placeholder="Middle">
+              </div>
+              <div class="col-sm-3 mb-2 mb-sm-0">
+                <input type="text" class="form-control" name="doctorLast" placeholder="Last" required>
+                <div class="invalid-feedback">
+                  Please enter your last name
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Contact</label>
+              <div class="col-sm-5 mb-2 mb-sm-0">
+                <input type="tel" class="form-control mb-2" name="doctorPhone" placeholder="Phone"
+                  data-mask="(999) 999-9999" required>
+                <div class="invalid-feedback">
+                  Please enter a phone number
+                </div>
+                <input type="text" class="form-control" name="doctorFax" placeholder="Fax">
+              </div>
+              <div class="col-sm-5 mb-2 mb-sm-0">
+                <input type="email" class="form-control mb-2" name="doctorEmail" placeholder="Email" required>
+                <div class="invalid-feedback">
+                  Please enter an email
+                </div>
+                <input type="text" pattern="[0-9]{6}" class="form-control" name="doctorBN"
+                  placeholder="OHIP Billing Number (6 digits)" required>
+                <div class="invalid-feedback">
+                  Please enter your OHIP Billing Number (6 digits)
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">Practice Address</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control mb-2" name="doctorClinic"
+                  placeholder="Clinic Name/ Provider Number">
+                <input type="text" class="form-control mb-2" name="doctorAddr1" placeholder="Address Line 1">
+                <input type="text" class="form-control mb-2" name="doctorAddr2" placeholder="Address Line 2">
+                <div class="row">
+                  <div class="col-4 mb-2 mb-sm-0">
+                    <input type="text" class="form-control" name="doctorCity" placeholder="City">
+                  </div>
+                  <div class="col-4 mb-2 mb-sm-0">
+                    <input type="text" class="form-control" name="doctorProvince" placeholder="Province">
+                  </div>
+                  <div class="col-4 mb-2 mb-sm-0">
+                    <input type="text" class="form-control" name="doctorPostal" placeholder="Postal Code">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="submitCheck" required>
+              <label class="custom-control-label" for="submitCheck">I certify that the above information is accurate
+                and have the patient's permission to use it for the purpose of this referral</label>
+              <div class="invalid-feedback">
+                You must agree before submitting.
+              </div>
+            </div>
+            <br>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" name="sendCopyCheck" id="sendCopyCheck">
+              <label class="custom-control-label" for="sendCopyCheck">Send a copy of the completed form to my
+                email</label>
+            </div>
+            <br>
+            <p><i>Note: To ensure all transmissions are encrypted using TLS 1.3, we enforce HTTPS; if your browser does
+                not support HTTPS, please use an up to date one to submit this form. Private information received will
+                not be stored for any other purpose and is immediately forwarded to our physicians' mailbox.</i></p>
+            <hr />
+            <h3>Verification</h3>
+            <div class="form-group row">
+              <div class="col-sm-12 text-center">
+                <img id="captchaImg" src="./res/captcha_placeholder.png"
+                  alt="Please press 'Request Code' then enter the letters and numbers that you see (Case Sensitive)" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-4">
+                <button id="captchaBtn" type="button" onclick="getCaptcha()" class="btn btn-secondary btn-block">1.
+                  Request Code</button>
+              </div>
+              <div class="col-8">
+                <input type="hidden" id="captchaHash" name="captchaHash" value="" />
+                <input type="text" pattern="[A-Z a-z 0-9]{6}" class="form-control" name="captchaResponse"
+                  placeholder="2. Enter Code" required />
+                <div class="invalid-feedback">
+                  Please enter the verification code
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-12">
+                <button id="submitBtn" data-toggle="tooltip"
+                  title="We are asking you to complete a captcha code before submitting due to spam submissions, thank you for your understanding."
+                  type="submit" class="btn btn-primary btn-lg btn-block" disabled>3. Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-12">
+          <p class="copyright-text">&copy; 2020. Agape Integrated Clinic. All Rights Reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+<script>
+  function gotoHash() {
+    var navLink;
+    var pane = $('a[data-target="' + location.hash + '"]');
+    console.log(pane);
+    if (pane.length) {
+      $('.tab-pane').removeClass('active');
+      $('.nav-link').removeClass('active');
+      $('a[data-target="' + location.hash + '"]').tab('show');
+      $('a[data-target="' + location.hash + '"]').addClass('active');
+    }
+    return $('a[data-toggle="tab"]').on('shown', function (e) {
+      return location.hash = $(e.target).attr('href').substr(1);
+    });
+  }
+
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    if (location.hash !== '') {
+      gotoHash();
+    }
+  });
+
+  $(window).on('hashchange', function (e) {
+    gotoHash()
+  });
+
+  $(window).on('pageshow', function () {
+    var form = $('form');
+    // reset on load
+    $('input[name=images]').val('')
+    $('input[id=submitCheck]').prop('checked', false)
+    $('div[id=preview]').empty()
+  });
+
+  function dragNdrop(event) {
+    var preview = document.getElementById("preview");
+    if (event.target.files.length > 10) {
+      alert('Please select no more than 10 files');
+      return;
+    }
+    preview.innerHTML = "";
+    Array.from(event.target.files).forEach(f => {
+      var fileName = URL.createObjectURL(f);
+      var previewImg = document.createElement("img");
+      previewImg.setAttribute("src", fileName);
+      preview.appendChild(previewImg);
+    });
+  }
+  function drag() {
+    document.getElementById('uploadFile').parentNode.className = 'draging dragBox';
+  }
+  function drop() {
+    document.getElementById('uploadFile').parentNode.className = 'dragBox';
+  }
+
+</script>
+
+<script>
+
+  function sha256(str) {
+    // We transform the string into an arraybuffer.
+    var buffer = new TextEncoder("utf-8").encode(str);
+    return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
+      return hex(hash);
+    });
+  }
+
+  function hex(buffer) {
+    var hexCodes = [];
+    var view = new DataView(buffer);
+    for (var i = 0; i < view.byteLength; i += 4) {
+      // Using getUint32 reduces the number of iterations needed (we process 4 bytes each time)
+      var value = view.getUint32(i)
+      // toString(16) will give the hex representation of the number without padding
+      var stringValue = value.toString(16)
+      // We use concatenation and slice for padding
+      var padding = '00000000'
+      var paddedValue = (padding + stringValue).slice(-padding.length)
+      hexCodes.push(paddedValue);
+    }
+
+    // Join all the hex strings into one
+    return hexCodes.join("");
+  }
+
+  function getCaptcha() {
+    var captchaImg = document.getElementById("captchaImg");
+    var captchaHashInput = document.getElementById("captchaHash");
+    var submitBtn = document.getElementById("submitBtn");
+    captchaImg.setAttribute("src", "./res/loading.gif");
+    // jQuery non-min breaks the nav tabs, TODO: use a PWA framework  
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://agapeclinic.ca/referral/captcha');
+    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const digest = sha256(xhr.response).then(hash => {
+          captchaImg.setAttribute("src", xhr.response);
+          captchaHashInput.setAttribute("value", hash);
+          submitBtn.removeAttribute("disabled");
+          submitBtn.setAttribute("data-toggle", "");
+          submitBtn.removeAttribute("data-original-title");
+          submitBtn.removeAttribute("aria-describedby");
+        });
+      } else {
+        alert('Failed to get captcha. Please email us at info@agapeclinic.ca');
+      }
+      submitBtn.scrollIntoView(true);
+    };
+    xhr.send();
+  }
+</script>
+
+<style>
+  #captchaImg {
+    max-height: 120px;
+    width: auto;
+  }
+
+  html {
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Roboto';
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  footer {
+    margin-top: auto;
+    padding-top: 2rem;
+  }
+
+  h1 {
+    font-family: 'Baloo Chettan 2';
+  }
+
+  h3 {
+    font-family: 'Baloo Chettan 2';
+  }
+
+  .logo {
+    max-height: 15vh;
+    object-fit: scale-down;
+  }
+
+  .banner {
+    background-color: white;
+    padding: 0.5rem 0 0.5rem 0;
+  }
+
+  .motd {
+    padding: 1rem 5rem 1rem 5rem;
+    min-width: 400px;
+    max-width: 1240px;
+    background-color: rgb(32, 32, 32);
+    color: #FFFFFF;
+  }
+
+  .motd-title {
+    padding: 1rem 0.5rem 0 0.5rem;
+    background-color: rgb(32, 32, 32);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    object-fit: scale-down;
+    max-height: 100px;
+    color: white;
+    font-family: 'Baloo Chettan 2';
+    font-size: 20pt;
+  }
+
+  @-webkit-keyframes progress {
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: -75px 0px;
+    }
+  }
+
+  @-moz-keyframes progress {
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: -75px 0px;
+    }
+  }
+
+  @-ms-keyframes progress {
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: -75px 0px;
+    }
+  }
+
+  @keyframes progress {
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: -4.2vw 0;
+    }
+  }
+
+  .motd-bg {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    animation-name: progress;
+    animation-duration: 4s;
+    -webkit-animation: progress 4s linear infinite;
+    -moz-animation: progress 4s linear infinite;
+    -ms-animation: progress 4s linear infinite;
+    animation: progress 4s linear infinite;
+    animation-iteration-count: infinite;
+    background: repeating-linear-gradient(45deg,
+        #FFF 1vw,
+        rgb(128, 128, 128, 0.2) 1vw,
+        rgb(128, 128, 128, 0.2) 1.5vw,
+        #FFF 1.5vw,
+        #FFF 2vw);
+    background-size: 120vw;
+    width: 100vw;
+    /* To avoid multiple instances */
+  }
+
+  .motd-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .nav-link {
+    padding: 0;
+    all: unset
+  }
+
+  .nav-link.active>.nav-btn {
+    cursor: pointer;
+    border-color: #FF3300;
+    border-width: 0 12px 1px 0;
+    color: #FFFFFF;
+    -webkit-text-fill-color: rgba(255, 255, 255, 1);
+    opacity: 1;
+    -webkit-opacity: 1;
+    background-color: rgb(32, 32, 32);
+  }
+
+  .nav-btn {
+    font-family: 'Baloo Chettan 2';
+    user-select: none;
+    padding: 1rem 0 1rem 1rem;
+    border-color: lightgray;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    transition: 0.2s;
+    transition-timing-function: ease-in;
+  }
+
+  .nav-btn:hover {
+    cursor: pointer;
+    border-color: #FF3300;
+    border-width: 0 4px 1px 0;
+    color: #FFFFFF;
+    background-color: rgb(32, 32, 32);
+  }
+
+  .tab-content {
+    min-height: 90vh;
+  }
+
+  .contact {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+  }
+
+  .card-title {
+    font-family: 'Baloo Chettan 2';
+  }
+
+  .map-responsive {
+    text-align: center;
+    overflow: hidden;
+    /* padding-bottom: 56.25%; */
+    min-height: 80vmin;
+    position: relative;
+    height: 0;
+  }
+
+  .map-responsive iframe {
+    left: 0;
+    top: 0;
+    min-height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+
+  .uploadOuter {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .uploadOuter strong {
+    padding: 0 10px;
+  }
+
+  .dragBox {
+    width: 250px;
+    height: 100px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    font-weight: bold;
+    line-height: 95px;
+    color: #999;
+    border: 2px dashed #ccc;
+    display: inline-block;
+    transition: transform 0.3s;
+  }
+
+  .dragBox input[type="file"] {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    top: 0;
+    left: 0;
+  }
+
+  .draging {
+    transform: scale(1.1);
+  }
+
+  #preview {
+    text-align: center;
+  }
+
+  #preview img {
+    margin: 5px;
+    object-fit: cover;
+    height: 10rem;
+    width: 10rem;
+  }
+</style>
+
+</html>

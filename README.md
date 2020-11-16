@@ -19,7 +19,7 @@ MAIL_PASS={mailer user password}
 MOTD_HOST={your SMTP host}
 MOTD_USER={motd receiver user account}
 MOTD_PASS={motd receiver user password}
-FRONTEND_ASSETS_PATH
+PUBLIC_HTML_PATH={path of index.html for template to be generated}
 ```
 
 Ensure the `mailing-list` file is present in the same directory as `index.js`, containing the emails that each referral form will be mailed to (demarcated by newlines)
