@@ -102,7 +102,7 @@ async function getLastMOTD() {
 
     return { sender, timestamp, message };
   } catch (ex) {
-    console.error(ex);
+    console.log(ex);
   }
 }
 
