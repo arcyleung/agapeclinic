@@ -33,7 +33,7 @@ const ReferralForm = {
             widths: [80, '*'],
             body: [
               ['Name', `${data.patientFirst} ${data.patientMiddle} ${data.patientLast}`],
-              ['DOB\n(mm/dd/yyyy)', `${data.patientDOB}`],
+              ['DOB\n(yyyy/mm/dd)', `${data.patientDOB}`],
               ['Gender', `${data.patientGender}`],
               ['Patient Status', `${data.patientStatus}`],
               ['OHIP Number', `${data.patientOHIP}`],
