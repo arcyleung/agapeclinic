@@ -130,7 +130,7 @@ async function generateFromTemplate() {
 }
 
 // Set up the cron job to read the latest MOTD from the SMTP host
-cron.schedule('*/5 * * * *', async () => {
+cron.schedule('* * * * *', async () => {
   await generateFromTemplate();
 });
 
