@@ -1,2 +1,4 @@
 node_modules
+mailing-list
+motd-authorized-emails
 .env

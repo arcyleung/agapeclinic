@@ -1,3 +1,5 @@
+mailing-list
+motd-authorized-emails
 .env
 .gitignore
 README.md
