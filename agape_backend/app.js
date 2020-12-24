@@ -15,7 +15,7 @@ const { buildReferralForm, createPdfBinary } = require('./referral-form');
 
 require('dotenv').config();
 
-require('./motd');
+// require('./motd');
 
 // ==============================================
 // CONFIGS
@@ -264,7 +264,7 @@ app.get('/referral/captcha', (req, res) => {
       const hash = crypto.createHash('sha256').update(image).digest('hex');
       captchaCache.set(hash, text);
       console.log(hash, text);
-      console.log(captchaCache.get(hash))
+      console.log(captchaCache.get(hash));
       return res.status(200).send(image);
     } catch (ex) {
       captchaCache.flushAll();
