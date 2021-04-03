@@ -1,57 +1,308 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-/* eslint-disable no-shadow */
-const pm2 = require('pm2');
+const fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+const crypto = require('crypto');
+const moment = require('moment');
+const multer = require('multer');
+const express = require('express');
+const NodeCache = require('node-cache');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
+const twoFactor = require('node-2fa');
 
-pm2.connect(true, (err) => {
-  if (err) {
-    console.error(`error! ${err}`);
-    process.exit(2);
+const pjson = require('./package.json');
+const generateCaptcha = require('./captcha');
+const { buildReferralForm, createPdfBinary } = require('./referral-form');
+
+require('dotenv').config();
+
+// require('./motd');
+
+// ==============================================
+// CONFIGS
+// ==============================================
+let mailingList;
+
+try {
+  mailingList = fs.readFileSync('mailing-list').toString().split('\n');
+  if (!mailingList.length) { throw Error('mailing-list must contain at least 1 email!'); }
+} catch (ex) {
+  console.error('Failed to read mailing-list: please ensure a "mailing-list" file is present in the same directory as index.js');
+  process.exit(1);
+}
+
+// Refactor into config; we likely won't see > 100 referrals a day
+const maxReferrals = 100;
+let currentRefIx = 0;
+let lastGenDay = moment().format('D');
+
+const upload = multer({ storage: multer.memoryStorage() });
+const app = express();
+
+const captchaCache = new NodeCache(
+  {
+    stdTTL: 300,
+    maxKeys: 5,
+    deleteOnExpire: true,
+    checkperiod: 60,
+  },
+);
+
+// debugging
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+const transporter = nodemailer.createTransport({
+  host: process.env.MAIL_HOST,
+  port: 465,
+  secure: true, // use SSL
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
+  },
+});
+
+// ==============================================
+// HELPER FUNCTIONS
+// ==============================================
+
+function generateRefID() {
+  const now = moment();
+  if (lastGenDay !== now.format('D') || currentRefIx > maxReferrals - 1) {
+    lastGenDay = now.format('D');
+    currentRefIx = 0;
+  }
+  const refID = `${now.format('YYYYMMDD')}-${currentRefIx.toString(10).padStart(2, '0')}`;
+  currentRefIx += 1;
+  return refID;
+}
+
+function sendEmail(binary, data, files, recipients) {
+  // Email options
+  const {
+    patientFirst,
+    patientMiddle,
+    patientLast,
+    doctorFirst,
+    doctorMiddle,
+    doctorLast,
+    doctorEmail,
+    sendCopyCheck,
+  } = data;
+
+  const mailOptions = {
+    from: process.env.MAIL_USER,
+    to: '',
+    subject: `[Referral ${data.refID}] ${patientFirst}${` ${patientMiddle} `}${patientLast}`,
+    text: `Referral for ${patientFirst}${` ${patientMiddle} `}${patientLast} from Dr. ${doctorFirst}${` ${doctorMiddle} `}${doctorLast}`,
+    attachments: [{
+      filename: `referral_${data.refID}_${patientFirst}_${patientLast}.pdf`,
+      content: binary,
+    }],
+  };
+
+  if (files) {
+    mailOptions.attachments.concat(
+      files.map((f) => ({
+        name: f.originalname,
+        content: f.buffer,
+      })),
+    );
   }
 
-  pm2.list((err, list) => {
-    console.log(err, list);
+  // Send mail
+  recipients.forEach((recipient) => {
+    mailOptions.to = recipient;
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(`Email sent: ${info.response}`);
+      }
+    });
   });
 
-  //   pm2.stop('agape-backend', (err, proc) => {
-  //   });
+  if (sendCopyCheck) {
+    mailOptions.to = doctorEmail;
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(`Email sent: ${info.response}`);
+      }
+    });
+  }
+}
 
-  //   pm2.restart('agape-backend', (err, proc) => {
-  //   });
+// ==============================================
+// EXPRESS ROUTES
+// ==============================================
+app.use(cors());
 
-  pm2.start({
-    name: 'agape-backend',
-    script: 'app.js', // Script to be run
-    exec_mode: 'fork', // Allows your app to be clustered
-    instances: 1, // Optional: Scales your app by 2
-    watch: 'app.js',
-    mergeLogs: true,
-    max_memory_restart: '400M', // Optional: Restarts your app if it reaches 100Mo
-    output: './logs/agape-backend.log',
-    error: './logs/agape-backend.err',
-    logDateFormat: 'YYYY-MM-DD HH:mm Z',
-    env: {
-      NODE_ENV: "production",
-      PORT: 8081
+// for parsing application/json
+app.use(bodyParser.json());
+
+// for parsing application/xwww-
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// for parsing multipart/form-data
+app.use(express.static('public'));
+
+app.get('/referral/health', (req, res) => {
+  let status = 200;
+  let message = 'Service is running OK!';
+
+  // config test
+  if (!process.env.MAIL_HOST || !process.env.MAIL_USER || !process.env.MAIL_PASS) {
+    status = 503;
+    message = 'Mail credentials not set!';
+  }
+
+  if (!mailingList || !mailingList.length) {
+    status = 503;
+    message = 'Mailing list is not found or empty!';
+  }
+
+  const response = {
+    status,
+    message,
+    mailingList,
+    mailHost: process.env.MAIL_HOST,
+    mailUser: process.env.MAIL_USER,
+  };
+
+  res.status(status).send(response);
+});
+
+// TODO: job queue system
+app.post('/referral', upload.array('images'), (req, res) => {
+  const data = { ...req.body };
+
+  const expected = captchaCache.take(data.captchaHash);
+  // Verify captcha
+  if (data.captchaResponse !== expected) {
+    return res.status(200).redirect('../captcha_failed.html');
+  }
+
+  try {
+    // PDF generation
+    const refID = generateRefID();
+    data.refID = refID;
+    const { files } = req;
+
+    // Set date
+    data.date = moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+    createPdfBinary(buildReferralForm(data, files),
+      (binary) => {
+        sendEmail(binary, data, files, mailingList);
+      }, (error) => {
+        console.log(error);
+      });
+
+    // TODO: use async/ await to send confirmation
+    return res.status(200).redirect(`../referral_received.html?refID=${refID}`);
+  } catch (ex) {
+    console.error(ex);
+    return res.status(500).redirect('../referral_failed.html');
+  }
+});
+
+app.post('/referral/test', upload.array('images'), (req, res) => {
+  const data = { ...req.body };
+
+  const expected = captchaCache.take(data.captchaHash);
+  // Verify captcha
+  if (data.captchaResponse !== expected) {
+    console.log(expected);
+    console.log(data.captchaResponse);
+    return res.send({
+      ip: req.ip,
+      captchaHash: data.captchaHash,
+      captchaResponse: data.captchaResponse,
+      correctResponse: expected,
+    });
+  }
+
+  try {
+    // PDF generation
+    const refID = 99;
+    data.refID = refID;
+    const { files } = req;
+
+    if (!data || data.testKey !== process.env.TEST_KEY) {
+      return res.status(401).send('Unauthorized');
     }
-  }, (err, apps) => {
-    pm2.disconnect(); // Disconnects from PM2
-    if (err) throw err;
-  });
 
-  // pm2.start({
-  //   name: 'agape-motd',
-  //   script: 'motd.js', // Script to be run
-  //   exec_mode: 'cluster', // Allows your app to be clustered
-  //   instances: 1, // Optional: Scales your app by 2
-  //   watch: 'motd.js',
-  //   mergeLogs: true,
-  //   max_memory_restart: '400M', // Optional: Restarts your app if it reaches 100Mo
-  //   output: './logs/agape-motd.log',
-  //   // error: './logs/agape-motd.err',
-  //   logDateFormat: 'YYYY-MM-DD HH:mm Z',
-  // }, (err, apps) => {
-  //   pm2.disconnect(); // Disconnects from PM2
-  //   if (err) throw err;
-  // });
+    console.log('Received test request');
+    console.log(data);
+    console.log(files);
+
+    // Set date
+    data.date = moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+    createPdfBinary(buildReferralForm(data, files),
+      (binary) => {
+        sendEmail(binary, data, files, [data.testEmail]);
+      }, (error) => {
+        res.status(500).redirect('../referral_failed.html');
+        res.send(error);
+      });
+
+    // TODO: use async/ await to send confirmation
+    return res.status(200).redirect(`../referral_received.html?refID=${refID}`);
+  } catch (ex) {
+    console.error(ex);
+    return res.send(ex);
+  }
+});
+
+app.get('/referral/captcha', (req, res) => {
+  let retries = 3;
+  do {
+    try {
+      const captchaData = generateCaptcha(500, 200);
+      const { image, text } = captchaData;
+      const hash = crypto.createHash('sha256').update(image).digest('hex');
+      captchaCache.set(hash, text);
+      console.log(hash, text);
+      console.log(captchaCache.get(hash));
+      return res.status(200).send(image);
+    } catch (ex) {
+      captchaCache.flushAll();
+    }
+    retries -= 1;
+  } while (retries > 0);
+  return res.status(500).send('Error generating captcha, please try again later...');
+});
+
+app.post('/motd', (req, res) => {
+  const data = { ...req.body };
+
+  // Token is valid within a 2 min window
+  // Depends on time, make sure OS has synchronized clock!
+  const auth = twoFactor.verifyToken(process.env.MOTD_SECRET, data.token, 200);
+  console.log(process.env.MOTD_SECRET, auth, req)
+  // Verify 2fa token
+  // Delta > 0: too early
+  // Delta < 0: too late
+  if (auth.delta !== 0) {
+    return res.status(400);
+  }
+
+  try {
+    // Write to motd text file
+    fs.writeFileSync(path.join(process.env.PUBLIC_HTML_PATH, 'motd.txt'), data.message);
+    return res.status(200);
+  } catch (ex) {
+    console.error(ex);
+    return res.status(500);
+  }
+});
+
+const server = app.listen(8081, () => {
+  const host = server.address().address;
+  const { port } = server.address();
+
+  console.log('AGAPE CLINIC BACKEND v%s', pjson.version);
+  console.log('Started on %s', moment.utc());
+  console.log('Listening at http://%s:%s', host, port);
 });
