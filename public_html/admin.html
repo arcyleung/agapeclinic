@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<header>
+    <title>Agape Integrated Clinic</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="General dermatology, Travel medicine and Integrated health care">
+    <meta name="keywords"
+        content="chiropractor,osteopath,dentist,optician,physiotherapist,therapy,physical,cosmetic,surgeon,alternative,medicine,naturopath,accupuncture,therapeutic,health,healthcare,hospital,medic,clinic,doctor">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Baloo Chettan 2' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <!-- JS, Popper.js, and jQuery -->
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link type="text/css" rel="stylesheet" href="./dist/image-uploader.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./dist/image-uploader.min.js"></script>
+</header>
+
+<div class="jumbotron text-center banner">
+    <img class="logo" src="./res/agape_logo.jpg"></img>
+</div>
+
+<body>
+    <div class="tab-content">
+        <br>
+
+        <div id="admin" class="row mb-2 tab-pane show active fade no-gutters">
+            <div class="col-12 mb-2">
+                <div class="container">
+                    <form id="admin-form" action="https://agapeclinic.ca/motd/" method="POST">
+                        <div class="form-group">
+                            <h1>Admin</h1>
+                            <br>
+                            <h3>Message of the day</h3>
+                            <div class="form-group">
+                                <label for="motdTextArea"></label>
+                                <textarea class="form-control" id="motdTextArea" name="motdMessage" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="motdToken">Verification code</label>
+                            <input class="form-control" id="motdToken"  name="motdToken">
+                          </div>
+                          <button type="submit" id="motdSubmit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <br><br>
+                    Click <a href="https://agapeclinic.ca">here</a> to go back to the main page.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                    <p class="copyright-text">&copy; 2021. Agape Integrated Clinic. All Rights Reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+<script>
+
+    $(document).ready(function () {
+        if (location.hash !== '') {
+            gotoHash();
+        }
+        // Load existing MOTD message into text box
+        var motdTextArea = document.getElementById("motdTextArea")
+        var xhr = new XMLHttpRequest();
+        // xhr.open('GET', 'https://agapeclinic.ca/motd');
+        xhr.open('GET', 'https://agapeclinic.ca/motd');
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log(xhr.response)
+                motdTextArea.value = xhr.response
+            } else {
+                alert('Failed to update MOTD.');
+            }
+        };
+        xhr.send();
+    });
+
+    $(window).on('hashchange', function (e) {
+        gotoHash()
+    });
+
+    $(window).on('pageshow', function () {
+        const params = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')))
+        if (params.has('refID')) {
+            $('#refID').text(params.get('refID'));
+        }
+    });
+
+</script>
+
+<style>
+    html {
+        height: 100%;
+        overflow-y: scroll;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Roboto';
+
+        min-height: 100vh;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    footer {
+        margin-top: auto;
+        padding-top: 2rem;
+    }
+
+    h1 {
+        font-family: 'Baloo Chettan 2';
+    }
+
+    h3 {
+        font-family: 'Baloo Chettan 2';
+    }
+
+    .logo {
+        max-height: 20vh;
+        object-fit: scale-down;
+    }
+
+    .banner {
+        background-color: white;
+        padding: 0.5rem 0 0.5rem 0;
+    }
+
+    .motd {
+        padding: 1rem 5rem 1rem 5rem;
+        max-width: 1240px;
+        background-color: rgb(32, 32, 32);
+        color: #FFFFFF;
+    }
+
+    .motd-title {
+        padding: 1rem 0.5rem 0 0.5rem;
+        background-color: rgb(32, 32, 32);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        object-fit: scale-down;
+        max-height: 100px;
+        color: white;
+        font-family: 'Baloo Chettan 2';
+        font-size: 20pt;
+    }
+
+    @-webkit-keyframes progress {
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: -75px 0px;
+        }
+    }
+
+    @-moz-keyframes progress {
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: -75px 0px;
+        }
+    }
+
+    @-ms-keyframes progress {
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: -75px 0px;
+        }
+    }
+
+    @keyframes progress {
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: -4.2vw 0;
+        }
+    }
+
+    .motd-bg {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        animation-name: progress;
+        animation-duration: 4s;
+        -webkit-animation: progress 4s linear infinite;
+        -moz-animation: progress 4s linear infinite;
+        -ms-animation: progress 4s linear infinite;
+        animation: progress 4s linear infinite;
+        animation-iteration-count: infinite;
+        background: repeating-linear-gradient(45deg,
+                #FFF 1vw,
+                rgb(128, 128, 128, 0.2) 1vw,
+                rgb(128, 128, 128, 0.2) 1.5vw,
+                #FFF 1.5vw,
+                #FFF 2vw);
+        background-size: 120vw;
+        width: 100vw;
+        /* To avoid multiple instances */
+    }
+
+    .motd-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .nav-link {
+        padding: 0;
+        all: unset
+    }
+
+    .nav-link.active>.nav-btn {
+        cursor: pointer;
+        border-color: #FF3300;
+        border-width: 0 12px 1px 0;
+        color: #FFFFFF;
+        -webkit-text-fill-color: rgba(255, 255, 255, 1);
+        opacity: 1;
+        -webkit-opacity: 1;
+        background-color: rgb(32, 32, 32);
+    }
+
+    .nav-btn {
+        font-family: 'Baloo Chettan 2';
+        user-select: none;
+        padding: 1rem 0 1rem 1rem;
+        border-color: lightgray;
+        border-style: solid;
+        border-width: 0 1px 1px 0;
+        transition: 0.2s;
+        transition-timing-function: ease-in;
+    }
+
+    .nav-btn:hover {
+        cursor: pointer;
+        border-color: #FF3300;
+        border-width: 0 4px 1px 0;
+        color: #FFFFFF;
+        background-color: rgb(32, 32, 32);
+    }
+
+    .tab-content {
+        min-height: 90vh;
+    }
+
+    .contact {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: top;
+    }
+
+    .card-title {
+        font-family: 'Baloo Chettan 2';
+    }
+
+    .map-responsive {
+        text-align: center;
+        overflow: hidden;
+        /* padding-bottom: 56.25%; */
+        min-height: 80vmin;
+        position: relative;
+        height: 0;
+    }
+
+    .map-responsive iframe {
+        left: 0;
+        top: 0;
+        min-height: 100%;
+        width: 100%;
+        position: absolute;
+    }
+
+    .uploadOuter {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .uploadOuter strong {
+        padding: 0 10px;
+    }
+
+    .dragBox {
+        width: 250px;
+        height: 100px;
+        margin: 0 auto;
+        position: relative;
+        text-align: center;
+        font-weight: bold;
+        line-height: 95px;
+        color: #999;
+        border: 2px dashed #ccc;
+        display: inline-block;
+        transition: transform 0.3s;
+    }
+
+    .dragBox input[type="file"] {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        top: 0;
+        left: 0;
+    }
+
+    .draging {
+        transform: scale(1.1);
+    }
+
+    #preview {
+        text-align: center;
+    }
+
+    #preview img {
+        margin: 5px;
+        object-fit: cover;
+        height: 10rem;
+        width: 10rem;
+    }
+</style>
+
+</html>
