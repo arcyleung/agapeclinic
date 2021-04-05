@@ -73,16 +73,11 @@
               <img src="./res/warn.png" style="max-height: 30px;" />
             </div>
             <div class="motd">
-              <br>
-              <p style="text-align: right; font-style: italic">Updated: 2021/03/11</p>
-              <br>
               <p>
-                The clinic will be <b>CLOSED</b> on the following days:
-                <br>
-                <div class="text-center">
+                <div id="motdMessageBox">
                   <!-- <h5>Closed days:</h5> -->
-                  </div>
-                  <table style="margin: auto">
+                </div>
+                  <!-- <table style="margin: auto">
                     <tr>
                       <td>Apr 2nd&nbsp;&nbsp;</td>
                       <td>Closed</td>
@@ -99,7 +94,7 @@
                       <td>Apr 13th&nbsp;&nbsp;</td>
                       <td>Closed</td>
                     </tr>
-                  </table>
+                  </table> -->
                 <br>
                 If you have any questions, please call <a href="tel:613-908-5288">(613) 908-5288</a> or email us at <a href="mailto: info@agapeclinic.ca">info@agapeclinic.ca</a>
               </p>
@@ -599,6 +594,21 @@
     if (location.hash !== '') {
       gotoHash();
     }
+
+    // Load existing MOTD message into text box
+    var motdMessageBox = document.getElementById("motdMessageBox")
+    var xhr = new XMLHttpRequest();
+    // xhr.open('GET', 'https://agapeclinic.ca/motd');
+    xhr.open('GET', 'https://agapeclinic.ca/referral/motd');
+    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            motdMessageBox.innerHTML = xhr.response
+        } else {
+            alert('Failed to update MOTD.');
+        }
+    };
+    xhr.send();
   });
 
   $(window).on('hashchange', function (e) {
@@ -699,6 +709,14 @@
 
   .motd a:hover {
     color: white;
+  }
+
+  #motdMessageBox {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    background-color: rgb(40, 40, 40);
+    white-space: pre-wrap
   }
 
   #captchaImg {
