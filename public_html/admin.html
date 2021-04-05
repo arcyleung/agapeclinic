@@ -39,7 +39,7 @@
         <div id="admin" class="row mb-2 tab-pane show active fade no-gutters">
             <div class="col-12 mb-2">
                 <div class="container">
-                    <form id="admin-form" action="https://agapeclinic.ca/motd/" method="POST">
+                    <form id="admin-form" action="https://agapeclinic.ca/referral/motd/" method="POST">
                         <div class="form-group">
                             <h1>Admin</h1>
                             <br>
@@ -82,8 +82,7 @@
         // Load existing MOTD message into text box
         var motdTextArea = document.getElementById("motdTextArea")
         var xhr = new XMLHttpRequest();
-        // xhr.open('GET', 'https://agapeclinic.ca/motd');
-        xhr.open('GET', 'https://agapeclinic.ca/motd');
+        xhr.open('GET', 'https://agapeclinic.ca/referral/motd');
         xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
         xhr.onload = function () {
             if (xhr.status === 200) {

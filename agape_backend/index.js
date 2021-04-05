@@ -274,7 +274,7 @@ app.get('/referral/captcha', (req, res) => {
   return res.status(500).send('Error generating captcha, please try again later...');
 });
 
-app.post('/motd', (req, res) => {
+app.post('/referral/motd', (req, res) => {
   const data = { ...req.body };
 
   // Token is valid within a 2 min window
@@ -299,7 +299,7 @@ app.post('/motd', (req, res) => {
   }
 });
 
-app.get('/motd', (req, res) => {
+app.get('/referral/motd', (req, res) => {
   try {
     const motdMessage = fs.readFileSync(path.join(process.env.PUBLIC_HTML_PATH, 'motd.txt'), 'utf8').toString();
     return res.status(200).send(motdMessage);
