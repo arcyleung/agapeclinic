@@ -279,11 +279,11 @@ app.post('/motd', (req, res) => {
 
   // Token is valid within a 2 min window
   // Depends on time, make sure OS has synchronized clock!
-  const auth = twoFactor.verifyToken(process.env.MOTD_SECRET, data.token, 200);
+  const auth = twoFactor.verifyToken(process.env.MOTD_SECRET, data.motdToken, 200);
   // Verify 2fa token
   // Delta > 0: too early
   // Delta < 0: too late
-  if (auth.delta !== 0) {
+  if (!auth || Math.abs(auth.delta) > 1) {
     return res.status(400).send('Invalid token!');
   }
 
@@ -291,11 +291,11 @@ app.post('/motd', (req, res) => {
 
   try {
     // Write to motd text file
-    fs.writeFileSync(path.join(process.env.PUBLIC_HTML_PATH, 'motd.txt'), data.message);
+    fs.writeFileSync(path.join(process.env.PUBLIC_HTML_PATH, 'motd.txt'), data.motdMessage);
     return res.status(200).send('MOTD updated successfully!');
   } catch (ex) {
     console.error(ex);
-    return res.status(500).send('Error!');
+    res.status(500).send('Error!');
   }
 });
 
